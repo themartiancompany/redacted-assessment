@@ -79,3 +79,7 @@ Write 3 test cases:
 a) Write a test case that should return a valid output;
 b) Write a test case that should fail due to constraints;
 c) Write a test case that should raise a `ValueError`.
+
+# Part 4: Optimization
+
+State an optimization that would enhance the algorithm efficiency.
