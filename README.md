@@ -20,7 +20,7 @@
 [comment]: <> (If not, see <https://www.gnu.org/licenses/>.)
 
 
-# *redacted* Assessment interview
+# *Redacted* assessment interview
 
 This repository contains the work associated
 to the
