@@ -28,6 +28,21 @@ assessment private I think I will just make this
 repository public while redacting the identity of
 the involved parties and immediately send the request. 
 
+# 5:00-6:30
+Since I'm travelling and I'm from the Android environment
+and I've discovered there's no IPython development environment
+packaged for Android, I've spent this hour and half start packaging
+it for Life and DogeOS.
+I've also deemed appropriate to livestream the work on this
+repository and of the others on X.
+
+I've packaged the program I'm writing under
+[mysterious-shop](
+  https://github.com/themartiancompany/mysterious-shop-ur)
+and
+[mysterious-shop-git](
+  https://github.com/themartiancompany/mysterious-shop-git-ur).
+
 ### 19:00
 
 I need to sleep.
