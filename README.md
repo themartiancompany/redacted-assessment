@@ -20,14 +20,14 @@
 [comment]: <> (If not, see <https://www.gnu.org/licenses/>.)
 
 
-# *Redacted* assessment interview
+# *\*Redacted\** assessment interview
 
 This repository contains the work associated
 to the
 [assessment request](
   request.md)
-by *redacted* in regard to the
-*redacted* contractor role.
+by *\*redacted\** in regard to the
+*\*redacted\** contractor role.
 
 Request fulfillment log is at
 [this page](
@@ -47,3 +47,5 @@ Also I'm sorry in advance for some
 eventual quirkness as it's probably 3 or 4 years
 I don't write Python code which is supposed to be
 universally nice to read.
+
+*Pellegrino Prevete from The Martian Company*
