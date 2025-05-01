@@ -1,10 +1,11 @@
 # Development diary
 
-Video recordings for the following logs are available
-on
+Full video recordings for the following logs from
+my
 [X](
   https://x.com/truocolo).
-I will probably add direct links later.
+profile are linked in the headers for the
+following logs.
 
 ## April 28th 2025
 
@@ -36,7 +37,7 @@ the involved parties and immediately send the request.
 
 ## 29th April 2025 
 
-# 5:00-6:30
+### [5:00-6:30](https://x.com/truocolo/status/1916720123366277193)
 Since I'm travelling and I'm from the Android environment
 and I've discovered there's no IPython development environment
 packaged for Android, I've spent this hour and half start packaging
@@ -51,6 +52,11 @@ and
 [mysterious-shop-git](
   https://github.com/themartiancompany/mysterious-shop-git-ur).
 
+### [17:00-18:00](https://x.com/truocolo/status/1916868716026908970)
+
+On this session I just package a couple dependencies for
+IPython.
+
 ### 19:00
 
 I need to sleep.
@@ -61,13 +67,14 @@ in case.
 
 ## 30th April 2025
 
-### 21:00-01:00
+### [21:00-01:00](https://x.com/truocolo/status/1917708259844124793)
 
-I do package more IPython dependencies for Android.
+I do package more IPython dependencies for Life and
+DogeOS Android bases.
 
 ## 1th May 2025
 
-### 12:00-13:00
+### [12:00-13:00](https://x.com/truocolo/status/1917902574742651129)
 
 IPython for Life and DogeOS Android bases has been
 packaged and made uncensorable on the
@@ -82,7 +89,7 @@ Now that I have the development tool needed to
 comfortably complete the assessment, I can
 concretely start working on it.
 
-### 13:30-
+### 13:30-16:30
 
 Complete implementation for an `AppConfig`
 application configuration class.

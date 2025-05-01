@@ -33,25 +33,51 @@ class ZoneManager:
   def __init__(
         _self,
         _discount_max,
-        _discount_delta):
+        _discount_delta,
+        _zones):
     # The M parameter from the request
     _self._discount_max = _discount_max
     # The P parameter from the request
     _self._discount_delta = _discount_delta
+    for _zone in _zones:
+      _zone_add(
+        _zone)
 
   def _zone_add(
         _self,
-        _zone_name):
-    _zone = {}
-    _zone_new = not any(
-                      ( _zone_name ==
-                        _zone['name'] ) for _zone in _self._zones) 
-    if ( _zone_new ):
+        _zone_name,
+        _categories_allowed=set()):
+    _zone_exists = any(
+                     ( _zone_name ==
+                       _zone['name'] ) for _zone in _self._zones)
+    if ( _zone_exists ):
+      raise ValueError(
+              f"Zone '{_zone_name}' exists already.")
+    else:
+      _zone = {
+        'name':
+          _zone_name,
+        'items':
+          set(),
+        'categories_allowed':
+          _categories_allowed,
+        'categories_allocated':
+          set()
+      }
       _self.zones.add(
         _zone)
-    else:
-      print(
-        f"Zone '{_zone_name}' exists already.")
+
+  def _item_discount_max_check(
+        _self,
+        _item):
+    _item_discount_max = _item[
+                           'discount_max']
+    if ( _item_discount_max > _self._discount_max ):
+      raise ValueError(
+              ("Not valid input: "
+               f"item '{_item}' has discount "
+               f"'{_item_discount_max}' greater than "
+               f"allowed max discount '{_self._discount_max}'."))
 
   def _item_add(
         _self,
@@ -61,12 +87,13 @@ class ZoneManager:
       'category']
     _item_discount_max = _item[
       'discount_max']
-    _item_discount_max_allowed = _item_discount_max < _self._discount_max
-    _category_item_allowed = _item_category in _categories_allowed
+    _item_discount_max_check(
+      _item)
+    _category_item_allowed = _item_category in _zone['_categories_allowed']
     _category_item_unused = _item_category not in _categories_allocated
-    _zone_unique = not any(_item in _zone for _zone in _self.zones)
+    _zone_unique = not any(_item in _zone['items'] for _zone in _self.zones)
     if ( _item_discount_max_allowed and
-         _category_item_allowedl and
+         _category_item_allowed and
          _category_item_unused ):
       _self._items.add(
         _item)
