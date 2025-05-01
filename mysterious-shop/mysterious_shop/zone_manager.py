@@ -32,12 +32,12 @@ class ZoneManager:
   def __init__(
         _self,
         _discount_max,
-        _discount_delta,
+        _price_delta_max,
         _zones):
     # The M parameter from the request
     _self._discount_max = _discount_max
     # The P parameter from the request
-    _self._discount_delta = _discount_delta
+    _self._price_delta_max = _price_delta_max
     for _zone in _zones:
       _zone_add(
         _zone)
@@ -66,6 +66,20 @@ class ZoneManager:
       _self.zones.add(
         _zone)
 
+  def _zone_items_min_check(
+        _self,
+        _zone):
+    _zone_items = _zone[
+                    'items']
+    _zone_items_amount = len(
+                           _zone_items)
+    _zone_items_min = _self._zone_items_min
+    if ( _item_items_amount > _zone_items_min ):
+      raise ValueError(
+              ("Not valid input: "
+               f"zone '{_zone}' has already "
+               f"'{_zone_items_amount}' items in it."))
+
   def _zone_items_max_check(
         _self,
         _zone):
@@ -73,7 +87,8 @@ class ZoneManager:
                     'items']
     _zone_items_amount = len(
                            _zone_items)
-    if ( _item_items_amount > _self._zone_items_max ):
+    _zone_items_max = _self._zone_items_max
+    if ( _item_items_amount > _zone_items_max ):
       raise ValueError(
               ("Not valid input: "
                f"zone '{_zone}' has already "
@@ -84,12 +99,13 @@ class ZoneManager:
         _item):
     _item_discount_max = _item[
                            'discount_max']
-    if ( _item_discount_max > _self._discount_max ):
+    _discount_max = _self._discount_max
+    if ( _item_discount_max > _discount_max ):
       raise ValueError(
               ("Not valid input: "
                f"item '{_item}' has discount "
                f"'{_item_discount_max}' greater than "
-               f"allowed max discount '{_self._discount_max}'."))
+               f"allowed max discount '{_discount_max}'."))
 
   def _item_category_allowed_check(
         _self,
@@ -104,7 +120,7 @@ class ZoneManager:
               ("Not valid input: "
                f"category {_item_category} for item "
                f"'{_item}' not in zone's allowed categories "
-               f"'{_zone['categories_allowed']}'."))
+               f"'{_categories_allowed}'."))
 
   def _item_zone_single_check(
         _self,
@@ -122,19 +138,26 @@ class ZoneManager:
                f"item '{_item}' already in one"))
                f"of the zones."))
 
-  def _item_category_unused_check(
+  def _item_zone_price_delta_max_check(
         _self,
         _item,
         _zone):
-    _item_category = _item[
-      'category']
-    _zone_categories = _zone[
-                         'categories_allocated']
-    if ( _item_category in _zone_categories ):
+    _item_price = _item[
+                    'price']
+    _zone_items = _zone[
+                    'items']
+    _price_delta_max = _self._price_delta_max
+    if any(
+         ( abs(
+             _item_price - _item[
+                             'price'] ) >
+           _price_delta_max ) for _item in _zone_items ):
       raise ValueError(
               ("Not valid input: "
-               f"zone '{_zone}' already includes an item "
-               f"for category {_item_category}."))
+               f"item '{_item}' total price '{_item_price}' "
+               "differs from the total price of one of the items "
+               f"in zone '{_zone}' more than"
+               f"{_price_delta_max}."))
 
   def _item_zone_add(
         _self,
@@ -153,6 +176,9 @@ class ZoneManager:
     _self._item_zone_single_check(
       _item,
       _zone)
+    self._item_zone_price_delta_max_check(
+      _item,
+      _zone)
     _zone_items = _zone[
                     'items']
     _zone_categories = _zone[
@@ -163,3 +189,27 @@ class ZoneManager:
       _item_category)
     _zone_items.add(
       _item)
+
+  def _item_zone_remove(
+        _self,
+        _item,
+        _zone):
+    _zone_items = _zone[
+                    'items']
+    _zone_items.remove(
+      _items)
+
+  def _items_zone_add(
+        _self,
+        _items,
+        _zone):
+    for _item in _items:
+      _self._item_zone_add(
+        _item)
+
+  def _zone_validate(
+        _self,
+        _zone):
+    _self._zone_items_min_check(
+      _zone)
+
