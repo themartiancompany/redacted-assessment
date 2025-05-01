@@ -7,6 +7,15 @@ my
 profile are linked in the headers for the
 following logs.
 
+Of course I do kinda try to entertain the
+viewers of these recordings somehow
+when I'm in the mood, so their lengths
+do not represent the actual time
+spent on solving the problem;
+still they do include the actual
+reasoning behind the changes in the
+code.
+
 ## April 28th 2025
 
 ### 00:00
@@ -89,7 +98,7 @@ Now that I have the development tool needed to
 comfortably complete the assessment, I can
 concretely start working on it.
 
-### 13:30-16:30
+### [13:30-16:30](https://x.com/truocolo/status/1917967688220987444)
 
 Complete implementation for an `AppConfig`
 application configuration class.
@@ -97,3 +106,18 @@ Complete implementation for a `DbManager` databases'
 manager class.
 Start implementing a `ZoneManager` zones' manager
 class.
+
+### 18:00-21:30
+
+Finish implementing `ZoneManager` and
+`ItemManager` as in how I initially got the
+E-commerce website worked.
+
+At the moment of writing the requested optimization function
+though and the CartManager class, so reading the
+*total discount percentage* can actually
+be higher than the *per-item discount percentage* I do realize
+there's actually two discount rates involved in this optimization
+problem, one depending on the zone and another depending on the
+item, thus requiring some small changes to the data structures
+already implemented.

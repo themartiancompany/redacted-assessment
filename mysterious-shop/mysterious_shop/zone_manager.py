@@ -24,7 +24,6 @@
 
 class ZoneManager:
 
-  # _items = set()
   _zone_items_max = 4
   _zone_items_min = 2
   _zones = set()
@@ -94,18 +93,6 @@ class ZoneManager:
                f"zone '{_zone}' has already "
                f"'{_zone_items_amount}' items in it."))
 
-  def _item_discount_max_check(
-        _self,
-        _item):
-    _item_discount_max = _item[
-                           'discount_max']
-    _discount_max = _self._discount_max
-    if ( _item_discount_max > _discount_max ):
-      raise ValueError(
-              ("Not valid input: "
-               f"item '{_item}' has discount "
-               f"'{_item_discount_max}' greater than "
-               f"allowed max discount '{_discount_max}'."))
 
   def _item_category_allowed_check(
         _self,
@@ -212,4 +199,3 @@ class ZoneManager:
         _zone):
     _self._zone_items_min_check(
       _zone)
-
