@@ -1,7 +1,7 @@
 #  SPDX-License-Identifier: AGPL-3.0-or-later
 
 #
-#     db.py
+#     db_manager.py
 #
 #     ----------------------------------------------------------------------
 #     Copyright © 2025  Pellegrino Prevete
@@ -28,41 +28,65 @@ from os.path import join as _path_join
 
 from .util import _file_read, _file_write
 
-class Db:
+class DatabaseManager:
 
   # items = set()
+  _dbs = {}
 
   def __init__(
         _self,
         _app_config):
-    _self._db_items_path = _path_join(
-                             _app_config._dirs[
-                               'config'],
-                             "items.db")
-    if _path_exists(
-         _self._db_items_path):
-      _self._items = _self._db_load(
-                       _self._db_items_path)
-    else:
-      _self._items = set()
-      _self._db_write(
-        _self._items,
-        _self._db_items_path)
+    _db_load(
+      "items")
+    _db_load(
+      "zones")
+
+  def _db_path_get(
+        _self,
+        _type):
+    return _path_join(
+             _app_config._dirs[
+               'config'],
+             f"{_type}.db")
 
   def _db_load(
         _self,
-        _db_path):
-    _db = _file_read(
-            _db_path)
-    return _db
+        _db_type):
+    _db_path = _self._db_path_get(
+                 _type)
+    _db = _self.dbs[
+            _type]
+    _db = { 'path':
+              _path }
+    if _path_exists(
+         _path):
+      _db = _file_read(
+              _db[
+                _type][
+                  'path'])
+      _db[
+        _type][
+          'blob'] = _db
+    else:
+      _db = set()
+      _self._dbs[
+        _type][
+          'blob'] = _db
+      _self._db_write(
+        _type)
 
   def _db_write(
         _self,
-        _obj,
-        _db_path):
+        _db_type):
+    _db_path = _self.dbs[
+              _type][
+                'path']
+    _db = _self.dbs[
+            _type][
+              'blob']
     _file_write(
-            _obj,
-            _db_path)
+      _db,
+      _db_path)
 
   def _item_add(
         _self,

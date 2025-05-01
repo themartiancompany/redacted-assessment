@@ -86,6 +86,7 @@ concretely start working on it.
 
 Complete implementation for an `AppConfig`
 application configuration class.
-Complete implementation for a `Db` items database
+Complete implementation for a `DbManager` databases'
+manager class.
+Start implementing a `ZoneManager` zones' manager
 class.
-Start implementing a `ZoneManager` class.

@@ -25,7 +25,7 @@
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from .app_config import AppConfig
-from .db import Db
+from .db_manager import DbManager
 from .zone_manager import ZoneManager
 
 class Shop:
@@ -36,6 +36,6 @@ class Shop:
                       "mysterious-shop",
                       "Pellegrino Prevete",
                       True)
-    _self._db = Db(
-                  _self._app_config)
+    _self._db_manager = DbManager(
+                          _self._app_config)
     _self._zone_manager = ZoneManager()
