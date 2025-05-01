@@ -25,61 +25,89 @@
 #
 
 
-from appdirs import user_data_dir as _user_cache_dir
-from appdirs import user_data_dir as _user_config_dir
+from appdirs import user_cache_dir as _user_cache_dir
+from appdirs import user_config_dir as _user_config_dir
 from appdirs import user_data_dir as _user_data_dir
 
 from os.path import abspath as _abspath
 from os.path import dirname as _dirname
 from os.path import exists as _path_exists
 from os.path import join as _path_join
+import logging as _logging
 
-from .util import _file_write, _file_read
+from .util import _file_write, _file_read, _mkdir
 
 class AppConfig:
-    """Application configuration class.
+  """Application configuration class.
 
-    Attributes:
-        exec_path (str): path where the class resides;
-        appname (str): name of the app.
-        appauthor (str): name of the app author.
-        dirs (dict): paths of cache, data, config directories
-    """
+  Attributes:
+      _exec_path (str): path where the class resides;
+      _app_name (str): name of the app.
+      _app_author (str): name of the app author.
+      _dirs (dict): paths of cache, data, config directories
+  """
 
-    exec_path = _dirname(
-                  _abspath(
-                    __file__))
+  _exec_path = _dirname(
+                _abspath(
+                  __file__))
 
-    appname = "shop"
-    appauthor = "Pellegrino Prevete"
-    dirs = {
-      'data':
-        _user_data_dir(
-          appname,
-          appauthor),
-      'config':
-        _user_config_dir(
-          appname,
-          appauthor),
-      'cache':
-        _user_cache_dir(
-          appname,
-          appauthor)
+  def __init__(
+        _self,
+        _app_name,
+        _app_author,
+        _debug=True):
+    _logging.basicConfig(
+      level=_logging.DEBUG)
+    _self._logger = _logging.getLogger(
+                     __name__)
+    _self._attributes_set(
+      _app_name,
+      _app_author,
+      _debug)
+    _self._debug = _debug
+    _self._dirs_set()
+    _config_file = _path_join(
+                     _self._dirs[
+                       'config'],
+                     "config.pkl")
+    if not _path_exists(
+             _config_file):
+      _self._data = {}
+    else:
+      _self._data = _file_load(
+                     str(
+                       _config_file))
+
+  def _attributes_set(
+        _self,
+        _app_name,
+        _app_author,
+        _debug):
+    """Set global attributes for the class."""
+    _self._debug = _debug
+    _self._app_name = _app_name
+    _self._app_author = _app_author
+    _self._dirs = {
+     'data':
+       _user_data_dir(
+         _app_name,
+         _app_author),
+     'config':
+       _user_config_dir(
+         _app_name,
+         _app_author),
+     'cache':
+       _user_cache_dir(
+         _app_name,
+         _app_author)
     }
 
-    def __init__(
-          self,
-          debug=True):
-      self.debug = debug
-      self._set_dirs()
-      _config_file = _path_join(
-                       self.dirs[
-                         'config'],
-                       "config.pkl")
-      if not _path_exists(
-               _config_file):
-          self.data = {}
-      else:
-          self.data = _file_load(
-                        str(_config_file))
-
+  def _dirs_set(
+      _self):
+    """Make user dirs for mysterious-shop.
+    """
+    for _dir_type, _path in _self._dirs.items():
+      _self._logger.info(
+        f"Creating directory for {_dir_type}")
+      _mkdir(
+        _path)

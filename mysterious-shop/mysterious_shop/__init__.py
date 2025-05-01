@@ -27,4 +27,6 @@
 from .shop import Shop
 
 def _main():
-  pass
+  _shop = Shop()
+  print(
+    _shop)

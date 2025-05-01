@@ -1,7 +1,7 @@
 #  SPDX-License-Identifier: AGPL-3.0-or-later
 
 #
-#     db.py
+#     zone.py
 #
 #     ----------------------------------------------------------------------
 #     Copyright © 2025  Pellegrino Prevete
@@ -22,36 +22,54 @@
 #     You should have received a copy of the GNU Affero General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# from sqlitedict import SqliteDict
-from os.path import exists as _path_exists
-from os.path import join as _path_join
+class ZoneManager:
 
-from .util import _file_read, _file_write
-
-class Db:
-
-  # items = set()
+  # _items = set()
+  _items_max = 4
+  _items_min = 2
+  # _categories_allocated = set()
+  _zones = set()
 
   def __init__(
         _self,
-        _app_config):
-    _self._db_items_path = _path_join(
-                             _app_config._dirs[
-                               'config'],
-                             "items.db")
-    if _path_exists(
-         _self._db_items_path):
-      _self._items = _self._db_load(
-                       _self._db_items_path)
-    else:
-      _self._items = set()
-      _self._db_write(
-        _self._items,
-        _self._db_items_path)
+        _discount_max,
+        _discount_delta):
+    # The M parameter from the request
+    _self._discount_max = _discount_max
+    # The P parameter from the request
+    _self._discount_delta = _discount_delta
 
-  def _db_load(
+  def _zone_add(
         _self,
-        _db_path):
+        _zone_name):
+    _zone = {}
+    _zone_new = not any(
+                      ( _zone_name ==
+                        _zone['name'] ) for _zone in _self._zones) 
+    if ( _zone_new ):
+      _self.zones.add(
+        _zone)
+    else:
+      print(
+        f"Zone '{_zone_name}' exists already.")
+
+  def _item_add(
+        _self,
+        _item,
+        _zone):
+    _item_category = _item[
+      'category']
+    _item_discount_max = _item[
+      'discount_max']
+    _item_discount_max_allowed = _item_discount_max < _self._discount_max
+    _category_item_allowed = _item_category in _categories_allowed
+    _category_item_unused = _item_category not in _categories_allocated
+    _zone_unique = not any(_item in _zone for _zone in _self.zones)
+    if ( _item_discount_max_allowed and
+         _category_item_allowedl and
+         _category_item_unused ):
+      _self._items.add(
+        _item)
     _db = _file_read(
             _db_path)
     return _db

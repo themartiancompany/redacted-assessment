@@ -67,6 +67,8 @@ I do package more IPython dependencies for Android.
 
 ## 1th May 2025
 
+### 12:00-13:00
+
 IPython for Life and DogeOS Android bases has been
 packaged and made uncensorable on the
 [Ur](
@@ -79,3 +81,11 @@ An HTTP mirror is available at
 Now that I have the development tool needed to
 comfortably complete the assessment, I can
 concretely start working on it.
+
+### 13:30-
+
+Complete implementation for an `AppConfig`
+application configuration class.
+Complete implementation for a `Db` items database
+class.
+Start implementing a `ZoneManager` class.

@@ -24,29 +24,18 @@
 #     You should have received a copy of the GNU Affero General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from .app_config import AppConfig
+from .db import Db
+from .zone_manager import ZoneManager
+
 class Shop:
 
-  items = set()
-
   def __init__(
-        self):
-    pass 
-
-  def _item_add(
-        self,
-        _name,
-        _price,
-        _category,
-        _discount):
-    _item = {
-      "name":
-        _name,
-      "price":
-        _price,
-      "category":
-        _category,
-      "discount":
-        _discount
-    }
-    _items.add(
-      _item)
+        _self):
+    _self._app_config = AppConfig(
+                      "mysterious-shop",
+                      "Pellegrino Prevete",
+                      True)
+    _self._db = Db(
+                  _self._app_config)
+    _self._zone_manager = ZoneManager()

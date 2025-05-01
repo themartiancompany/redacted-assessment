@@ -1,7 +1,7 @@
 #  SPDX-License-Identifier: AGPL-3.0-or-later
 
 #
-#     db.py
+#     item.py
 #
 #     ----------------------------------------------------------------------
 #     Copyright © 2025  Pellegrino Prevete
@@ -22,19 +22,16 @@
 #     You should have received a copy of the GNU Affero General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# from sqlitedict import SqliteDict
-from os.path import exists as _path_exists
-from os.path import join as _path_join
-
-from .util import _file_read, _file_write
-
-class Db:
+class Item:
 
   # items = set()
 
   def __init__(
         _self,
-        _app_config):
+        _name,
+        _price,
+        _category,
+        _discount):
     _self._db_items_path = _path_join(
                              _app_config._dirs[
                                'config'],
