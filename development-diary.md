@@ -107,7 +107,7 @@ manager class.
 Start implementing a `ZoneManager` zones' manager
 class.
 
-### 18:00-21:30
+### [18:00-21:30](https://x.com/truocolo/status/1918040194487382256)
 
 Finish implementing `ZoneManager` and
 `ItemManager` as in how I initially got the
