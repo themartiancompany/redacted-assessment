@@ -33,6 +33,10 @@ Request fulfillment log is at
 [this page](
   request-fulfillment.md).
 
+Development diary is at this
+[other page](
+  development-diary.md).
+
 Completion may happen over a set of
 work sessions instead than on a single one
 as I'm currently employed as a teacher
