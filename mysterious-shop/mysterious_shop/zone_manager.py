@@ -25,9 +25,8 @@
 class ZoneManager:
 
   # _items = set()
-  _items_max = 4
-  _items_min = 2
-  # _categories_allocated = set()
+  _zone_items_max = 4
+  _zone_items_min = 2
   _zones = set()
 
   def __init__(
@@ -67,6 +66,19 @@ class ZoneManager:
       _self.zones.add(
         _zone)
 
+  def _zone_items_max_check(
+        _self,
+        _zone):
+    _zone_items = _zone[
+                    'items']
+    _zone_items_amount = len(
+                           _zone_items)
+    if ( _item_items_amount > _self._zone_items_max ):
+      raise ValueError(
+              ("Not valid input: "
+               f"zone '{_zone}' has already "
+               f"'{_zone_items_amount}' items in it."))
+
   def _item_discount_max_check(
         _self,
         _item):
@@ -79,51 +91,75 @@ class ZoneManager:
                f"'{_item_discount_max}' greater than "
                f"allowed max discount '{_self._discount_max}'."))
 
-  def _item_add(
+  def _item_category_allowed_check(
+        _self,
+        _item,
+        _zone):
+    _item_category = _item[
+                       'category']
+    _categories_allowed = _zone[
+                            'categories_allowed']
+    if not _item_category in _categories_allowed:
+      raise ValueError(
+              ("Not valid input: "
+               f"category {_item_category} for item "
+               f"'{_item}' not in zone's allowed categories "
+               f"'{_zone['categories_allowed']}'."))
+
+  def _item_zone_single_check(
+        _self,
+        _item,
+        _zone):
+    _zone_items = _zone[
+                    'items']
+    if _item in _zone_items:
+      pass
+    elif any(
+           _item in _zone[
+                      'items'] for _zone in _self.zones):
+      raise ValueError(
+              ("Not valid input: "
+               f"item '{_item}' already in one"))
+               f"of the zones."))
+
+  def _item_category_unused_check(
         _self,
         _item,
         _zone):
     _item_category = _item[
       'category']
-    _item_discount_max = _item[
-      'discount_max']
-    _item_discount_max_check(
+    _zone_categories = _zone[
+                         'categories_allocated']
+    if ( _item_category in _zone_categories ):
+      raise ValueError(
+              ("Not valid input: "
+               f"zone '{_zone}' already includes an item "
+               f"for category {_item_category}."))
+
+  def _item_zone_add(
+        _self,
+        _item,
+        _zone):
+    _self._zone_items_max_check(
+      _zone)
+    _self._item_discount_max_check(
       _item)
-    _category_item_allowed = _item_category in _zone['_categories_allowed']
-    _category_item_unused = _item_category not in _categories_allocated
-    _zone_unique = not any(_item in _zone['items'] for _zone in _self.zones)
-    if ( _item_discount_max_allowed and
-         _category_item_allowed and
-         _category_item_unused ):
-      _self._items.add(
-        _item)
-    _db = _file_read(
-            _db_path)
-    return _db
-
-  def _db_write(
-        _self,
-        _obj,
-        _db_path):
-    _file_write(
-            _obj,
-            _db_path)
-
-  def _item_add(
-        _self,
-        _name,
-        _price,
-        _category,
-        _discount):
-    _item = {
-      "name":
-        _name,
-      "price":
-        _price,
-      "category":
-        _category,
-      "discount":
-        _discount
-    }
-    _self._items.add(
+    _self._item_category_allowed_check(
+      _item,
+      _zone)
+    _self._item_category_unused_check(
+      _item,
+      _zone)
+    _self._item_zone_single_check(
+      _item,
+      _zone)
+    _zone_items = _zone[
+                    'items']
+    _zone_categories = _zone[
+                         'categories_allocated']
+    _item_category = _item[
+                       'category']
+    _zone_categories.add(
+      _item_category)
+    _zone_items.add(
       _item)
