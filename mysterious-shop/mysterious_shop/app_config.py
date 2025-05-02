@@ -66,17 +66,25 @@ class AppConfig:
       _debug)
     _self._debug = _debug
     _self._dirs_set()
-    _config_file = _path_join(
-                     _self._dirs[
-                       'config'],
-                     "config.pkl")
+    _self._data_load()
+
+  def _data_load(
+        _self):
+    _config_file_path = _self._config_file_path
     if not _path_exists(
-             _config_file):
+             _config_file_path):
       _self._data = {}
     else:
       _self._data = _file_load(
-                     str(
-                       _config_file))
+                       str(
+                         _config_file_path))
+
+  def _data_save(
+        _self):
+    _config_file_path = _self._config_file_path
+    _file_write(
+      _self._data,
+      _config_file_path)
 
   def _attributes_set(
         _self,
@@ -101,6 +109,10 @@ class AppConfig:
          _app_name,
          _app_author)
     }
+    _self._config_file_path = _path_join(
+                                _self._dirs[
+                                  'config'],
+                                "config.pkl")
 
   def _dirs_set(
       _self):

@@ -26,17 +26,53 @@
 
 from .app_config import AppConfig
 from .db_manager import DbManager
-from .zones_manager import ZonesManager
+from .categories_manager import CategoriesManager
 from .items_manager import ItemsManager
+from .zones_manager import ZonesManager
 
 class Shop:
 
   def __init__(
-        _self):
+        _self,
+        **_shop_config):
     _self._app_config = AppConfig(
-                      "mysterious-shop",
-                      "Pellegrino Prevete",
-                      True)
+                          "mysterious-shop",
+                          "Pellegrino Prevete",
+                          True)
+    _self._shop_config_init(
+      **_shop_config)
     _self._db_manager = DbManager(
                           _self._app_config)
-    _self._zone_manager = ZoneManager()
+    _self._categories_manager = CategoriesManager(
+                                  _self._db_manager._dbs[
+                                    'categories'][
+                                      'blob'])
+    #     _items_price_max,
+    #     _items_discount_max,
+    #     _items):
+    _self._items_manager = ItemsManager(
+                                  _self._db_manager._dbs[
+                                    'categories'][
+                                      'blob'])
+
+            )
+    _self._zones_manager = ZonesManager()
+
+  def _shop_config_init(
+        _self,
+        _cart_min_items=2,
+        _cart_max_items=100,
+        _zones_price_delta_min=1,
+        _zones_price_delta_max=10000,
+        _zones_discount_min=1,
+        _zones_discount_max=70,
+        _items_price_min=1,
+        _items_price_max=5000,
+        _categories_id_min=1,
+        _categories_id_max=20,
+        _items_discount_min=1,
+        _items_discount_max=50):
+    _shop_config = _self._app_config._data
+    _shop_config[
+      'cart_min_items'] = _cart
+    _self._shop_config = _shop_config
