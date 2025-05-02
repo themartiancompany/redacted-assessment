@@ -26,7 +26,8 @@
 
 from .app_config import AppConfig
 from .db_manager import DbManager
-from .zone_manager import ZoneManager
+from .zones_manager import ZonesManager
+from .items_manager import ItemsManager
 
 class Shop:
 

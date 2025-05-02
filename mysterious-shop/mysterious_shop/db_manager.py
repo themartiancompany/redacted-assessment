@@ -28,7 +28,7 @@ from os.path import join as _path_join
 
 from .util import _file_read, _file_write
 
-class DatabaseManager:
+class DbManager:
 
   # items = set()
   _dbs = {}
@@ -36,73 +36,56 @@ class DatabaseManager:
   def __init__(
         _self,
         _app_config):
-    _db_load(
+    _self._db_load(
       "items")
-    _db_load(
+    _self._db_load(
+      "categories")
+    _self._db_load(
       "zones")
 
   def _db_path_get(
         _self,
-        _type):
+        _db_type):
     return _path_join(
              _app_config._dirs[
                'config'],
-             f"{_type}.db")
+             f"{_db_type}.db")
 
   def _db_load(
         _self,
         _db_type):
     _db_path = _self._db_path_get(
-                 _type)
+                 _db_type)
     _db = _self.dbs[
-            _type]
+            _db_type]
     _db = { 'path':
               _path }
     if _path_exists(
          _path):
       _db = _file_read(
               _db[
-                _type][
+                _db_type][
                   'path'])
       _db[
-        _type][
+        _db_type][
           'blob'] = _db
     else:
       _db = set()
       _self._dbs[
-        _type][
+        _db_type][
           'blob'] = _db
       _self._db_write(
-        _type)
+        _db_type)
 
   def _db_write(
         _self,
         _db_type):
     _db_path = _self.dbs[
-              _type][
+              _db_type][
                 'path']
     _db = _self.dbs[
-            _type][
+            _db_type][
               'blob']
     _file_write(
       _db,
       _db_path)
-
-  def _item_add(
-        _self,
-        _name,
-        _price,
-        _category,
-        _discount):
-    _item = {
-      "name":
-        _name,
-      "price":
-        _price,
-      "category":
-        _category,
-      "discount":
-        _discount
-    }
-    _self._items.add(
-      _item)

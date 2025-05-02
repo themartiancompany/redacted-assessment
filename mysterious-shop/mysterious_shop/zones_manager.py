@@ -1,7 +1,7 @@
 #  SPDX-License-Identifier: AGPL-3.0-or-later
 
 #
-#     zone.py
+#     zones_manager.py
 #
 #     ----------------------------------------------------------------------
 #     Copyright © 2025  Pellegrino Prevete
@@ -22,29 +22,59 @@
 #     You should have received a copy of the GNU Affero General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-class ZoneManager:
+class ZonesManager:
 
-  _zone_items_max = 4
-  _zone_items_min = 2
+  _zones_items_max = 4
+  _zones_items_min = 2
   _zones = set()
 
   def __init__(
         _self,
-        _discount_max,
-        _price_delta_max,
+        _zones_discount_max,
+        _zones_price_delta_max,
         _zones):
     # The M parameter from the request
-    _self._discount_max = _discount_max
+    _self._zones_discount_max = _zones_discount_max
     # The P parameter from the request
-    _self._price_delta_max = _price_delta_max
+    _self._zones_price_delta_max = _zones_price_delta_max
     for _zone in _zones:
       _zone_add(
         _zone)
 
+  def _zone_new_check(
+        _self,
+        _zone):
+    _zone_name = _zone[
+                   'name']
+    _zone_exists = any(
+                     ( _zone_name ==
+                       _zone['name'] ) for _zone in _self._zones)
+    if ( _zone_exists ):
+      raise Exception(
+              f"Zone '{_zone_name}' exists already.")
+
   def _zone_add(
         _self,
         _zone_name,
-        _categories_allowed=set()):
+        _zone_discount_max,
+        _categories_allowed=set(),
+        _items=set()):
+    _zone = {
+      'name':
+        _zone_name,
+      'items':
+        _items,
+      'categories_allowed':
+        _categories_allowed,
+      'categories_allocated':
+        set(),
+      'discount_max':
+        _zone_discount_max
+    }
+    _self._zones_discount_max_check(
+      _zone)
+    _self._zone_new_check(
+      _zone)
     _zone_exists = any(
                      ( _zone_name ==
                        _zone['name'] ) for _zone in _self._zones)
@@ -52,16 +82,6 @@ class ZoneManager:
       raise ValueError(
               f"Zone '{_zone_name}' exists already.")
     else:
-      _zone = {
-        'name':
-          _zone_name,
-        'items':
-          set(),
-        'categories_allowed':
-          _categories_allowed,
-        'categories_allocated':
-          set()
-      }
       _self.zones.add(
         _zone)
 
@@ -72,8 +92,8 @@ class ZoneManager:
                     'items']
     _zone_items_amount = len(
                            _zone_items)
-    _zone_items_min = _self._zone_items_min
-    if ( _item_items_amount > _zone_items_min ):
+    _zones_items_min = _self._zones_items_min
+    if ( _zone_items_amount < _zones_items_min ):
       raise ValueError(
               ("Not valid input: "
                f"zone '{_zone}' has already "
@@ -86,13 +106,27 @@ class ZoneManager:
                     'items']
     _zone_items_amount = len(
                            _zone_items)
-    _zone_items_max = _self._zone_items_max
-    if ( _item_items_amount > _zone_items_max ):
+    _zones_items_max = _self._zones_items_max
+    if ( _item_items_amount > _zones_items_max ):
       raise ValueError(
               ("Not valid input: "
                f"zone '{_zone}' has already "
                f"'{_zone_items_amount}' items in it."))
 
+  def _zones_discount_max_check(
+        _self,
+        _zone):
+    _zone_discount_max = _zone[
+                           'discount_max']
+    _zones_discount_max = _self._zones_discount_max
+    if ( _zone_discount_max > _zones_discount_max ):
+      _zone_name = _zone[
+                     'name']
+      raise ValueError(
+              ("Not valid input: "
+               f"zone '{_zone_name}' has discount "
+               f"'{_zone_discount_max}' greater than "
+               f"allowed max zone discount '{_zones_discount_max}'."))
 
   def _item_category_allowed_check(
         _self,
@@ -122,7 +156,7 @@ class ZoneManager:
                       'items'] for _zone in _self.zones):
       raise ValueError(
               ("Not valid input: "
-               f"item '{_item}' already in one"))
+               f"item '{_item}' already in one "
                f"of the zones."))
 
   def _item_zone_price_delta_max_check(
@@ -152,8 +186,6 @@ class ZoneManager:
         _zone):
     _self._zone_items_max_check(
       _zone)
-    _self._item_discount_max_check(
-      _item)
     _self._item_category_allowed_check(
       _item,
       _zone)
