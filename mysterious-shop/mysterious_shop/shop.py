@@ -35,33 +35,47 @@ class Shop:
   def __init__(
         _self,
         **_shop_config):
-    _self._app_config = AppConfig(
-                          "mysterious-shop",
-                          "Pellegrino Prevete",
-                          True)
+    _app_config = AppConfig(
+                    "mysterious-shop",
+                    "Pellegrino Prevete",
+                    True)
+    _self.app_config = _app_config
     _self._shop_config_init(
       **_shop_config)
     _self._db_manager = DbManager(
                           _self._app_config)
+    _db_categories = _self._db_manager._dbs[
+                       'categories'][
+                         'blob']
     _self._categories_manager = CategoriesManager(
-                                  _self._db_manager._dbs[
-                                    'categories'][
-                                      'blob'])
+                                  _db_categories)
     #     _items_price_max,
     #     _items_discount_max,
     #     _items):
+    _items_price_min = _app_config[
+                         'items_price_min']
+    _items_price_max = _app_config[
+                         'items_price_max']
+    _items_discount_min = _app_config[
+                           'items_price_min']
+    _items_discount_max = _app_config[
+                           'items_price_max']
+    _categories = _self._db_manager._dbs[
+                    'categories'][
+                      'blob']
     _self._items_manager = ItemsManager(
-                                  _self._db_manager._dbs[
-                                    'categories'][
-                                      'blob'])
-
-            )
-    _self._zones_manager = ZonesManager()
+                             _items_price_min,
+                             _items_price_max,
+                             _items_discount_min,
+                             _items_discount_max,
+                             _categories)
+    _self._zones_manager = ZonesManager(
+                             )
 
   def _shop_config_init(
         _self,
-        _cart_min_items=2,
-        _cart_max_items=100,
+        _cart_items_min=2,
+        _cart_items_max=100,
         _zones_price_delta_min=1,
         _zones_price_delta_max=10000,
         _zones_discount_min=1,
@@ -73,6 +87,35 @@ class Shop:
         _items_discount_min=1,
         _items_discount_max=50):
     _shop_config = _self._app_config._data
-    _shop_config[
-      'cart_min_items'] = _cart
+    if not 'cart_items_min' in shop_config.keys():
+      _shop_config[
+        'cart_items_min'] = _cart_items_min
+    if not 'cart_items_max' in shop_config.keys():
+      _shop_config[
+        'cart_items_max'] = _cart_items_max
+    if not 'zones_price_delta_min' in shop_config.keys():
+      _shop_config[
+        'zones_price_delta_min'] = _zones_price_delta_min
+    if not 'zones_price_delta_max' in shop_config.keys():
+      _shop_config[
+        'zones_price_delta_max'] = _zones_price_delta_max
+    if not 'zones_discount_min' in shop_config.keys():
+      _shop_config[
+        'zones_discount_min'] = _zones_discount_min
+    if not 'zones_discount_max' in shop_config.keys():
+      _shop_config[
+        'zones_discount_max'] = _zones_discount_max
+    if not 'items_price_min' in shop_config.keys():
+      _shop_config[
+        'items_price_min'] = _zones_discount_min
+    if not 'items_price_max' in shop_config.keys():
+      _shop_config[
+        'items_price_max'] = _zones_discount_max
+    if not 'categories_id_min' in shop_config.keys():
+      _shop_config[
+        'categories_id_min'] = _categories_id_min
+    if not 'categories_id_max' in shop_config.keys():
+      _shop_config[
+        'categories_id_max'] = _categories_id_max
     _self._shop_config = _shop_config
+    _self._app_config._data_save()

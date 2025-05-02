@@ -28,10 +28,14 @@ class ItemsManager:
 
   def __init__(
         _self,
+        _items_price_min,
         _items_price_max,
+        _items_discount_min,
         _items_discount_max,
         _items):
+    _self._items_price_min = _items_price_min
     _self._items_price_max = _items_price_max
+    _self._items_discount_min = _items_discount_min
     _self._items_discount_max = _items_discount_max
     _self._items = _items
 
@@ -42,7 +46,7 @@ class ItemsManager:
       _self._item_add(
         _item)
     
-  def _item_add(
+  def _item_new(
         _self,
         _item_name,
         _item_price,
@@ -63,8 +67,6 @@ class ItemsManager:
     """
     _item_price = float(
                     _item_price)
-    # _self._item_price_check(
-    #   _price)
     _item = {
       "name":
         _item_name,
@@ -75,6 +77,12 @@ class ItemsManager:
       "discount":
         _item_discount_max
     }
+    _self._item_add(
+      _item)
+
+  def _item_add(
+        _self,
+        _item):
     _self._item_validate(
       _item)
     _self._items.add(
@@ -111,35 +119,49 @@ class ItemsManager:
     Args:
       _item_price (float): float representing the item price.
     """
-    _self._item_price_type_check(
-      _item_price)
+    _items_price_min = _self._items_price_min
     _items_price_max = _self._items_price_max
-    if _item_price < 0:
+    if _item_price > _items_price_min:
       raise ValueError(
               ("Invalid input: "
                f"price '{_price}' must "
-               "be a positive number."))
+               "be greater than '{_items_price_min}'."))
     if _item_price > _items_price_max:
       raise ValueError(
               ("Invalid input: "
                f"price '{_item_price}' must "
                f"be lower than '{_items_price_max}'."))
 
-  def _item_discount_max_check(
+  def _item_price_check(
+        _self,
+        _item):
+    _self._item_price_type_check(
+      _item_price)
+    _self._item_price_range_check(
+      _item_price)
+
+  def _item_discount_range_check(
         _self,
         _item):
     """Checks the item discount range
 
-    The range must be 0 < item_discount_max < M
-    where M is indicated in the request
+    The range must be
+    _items_discount_min < item_discount < _items_discount_max
+    where M is indicated in the request.
 
     Args:
       _item (dict): dictionary representing the item.
     """
     _item_discount_max = _item[
-                           'discount_max']
+                           'discount']
     _items_discount_max = _self._items_discount_max
-    if ( _items_discount_max > _item_discount_max ):
+    if ( _items_discount_min > _item_discount ):
+      raise ValueError(
+              ("Not valid input: "
+               f"item '{_item}' has discount "
+               f"'{_item_discount_max}' greater than "
+               f"allowed item max discount '{_items_discount_max}'."))
+    if ( _items_discount_max < _item_discount ):
       raise ValueError(
               ("Not valid input: "
                f"item '{_item}' has discount "
