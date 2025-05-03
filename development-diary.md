@@ -16,6 +16,11 @@ still they do include the actual
 reasoning behind the changes in the
 code.
 
+Also further than this log you have
+available for eventual quicker checking
+this repository's git logs and the
+concrete commits.
+
 ## April 28th 2025
 
 ### 00:00
@@ -44,7 +49,7 @@ assessment private I think I will just make this
 repository public while redacting the identity of
 the involved parties and immediately send the request. 
 
-## 29th April 2025 
+## April 29th 2025 
 
 ### [5:00-6:30](https://x.com/truocolo/status/1916720123366277193)
 Since I'm travelling and I'm from the Android environment
@@ -74,7 +79,7 @@ The development livestreams recording for this
 assessment are published on x.com/truocolo, just
 in case.
 
-## 30th April 2025
+## April 30th 2025
 
 ### [21:00-01:00](https://x.com/truocolo/status/1917708259844124793)
 
@@ -121,3 +126,34 @@ there's actually two discount rates involved in this optimization
 problem, one depending on the zone and another depending on the
 item, thus requiring some small changes to the data structures
 already implemented.
+
+## 2th May 2025
+
+### [17:00-20:30](https://x.com/truocolo/status/1918374720413524406)
+
+Adjust the existing classes for the two discount rates;
+add `categories_manager.py` and its `CategoriesManager` class,
+start writing the init functions and store settings.
+
+## 3th May 2025
+
+### 01:00-3:20
+
+Finishing implementing store settings together with
+a set of defaults, documented most classes and methods,
+properly renamed some functions to set up
+a stable reading/writing pattern for user-developers who could have
+to deal with this code in the future.
+
+So more or less I've like written almost a whole store application
+implementing the constraints to write the solver the request asks for.
+
+While one may observe doing this could have been kinda of an overshot,
+to a careful examiner who was to look at
+[my previously published projects](
+  https://github.com/themartiancompany/ur)
+it could be apparent I may already needed some of
+this code I've written for
+[purposes](
+  https://x.com/truocolo/status/1918387814145630213)
+related to those projects.
