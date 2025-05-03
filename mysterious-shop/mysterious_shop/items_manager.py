@@ -24,7 +24,7 @@
 
 class ItemsManager:
 
-  _items = set()
+  _items = {}
 
   def __init__(
         _self,
@@ -42,6 +42,11 @@ class ItemsManager:
   def _items_add(
         _self,
         _items):
+    """A set of items to the managed items.
+
+    Args:
+      _items (iterable): an iterable containing the items to be added.
+    """
     for _item in _items:
       _self._item_add(
         _item)
@@ -49,10 +54,11 @@ class ItemsManager:
   def _item_new(
         _self,
         _item_name,
+        _item_id,
         _item_price,
         _item_categories,
-        _item_discount_max):
-    """Adds an item to the items managed by the manager.
+        _item_discount):
+    """Creates and adds an item to be handled by the manager.
 
     The items are added as dictionaries to the data structure
     which is then saved to the database, currently a pickle
@@ -60,20 +66,23 @@ class ItemsManager:
 
     Args:
       _item_name (str): string representing the item name;
+      _item_id (int): id for the item;
       _item_price (float): floating point rational representing
-                           the item price.
+                           the item price;
       _item_categories (list(int)): list of integers representing 
-                                    the categories the item belongs to;
+                                    the categories the item belongs to.
     """
     _item_price = float(
                     _item_price)
     _item = {
       "name":
         _item_name,
+      "id":
+        _item_id,
       "price":
         _item_price,
-      "category":
-        _item_category,
+      "categories":
+        _item_categories,
       "discount":
         _item_discount_max
     }
@@ -83,15 +92,35 @@ class ItemsManager:
   def _item_add(
         _self,
         _item):
+    """Adds an item to those of those handled by the manager.
+
+    Args:
+      _item (dict): a dictionary representing the item.
+    """
     _self._item_validate(
       _item)
-    _self._items.add(
-      _item)
+    _item_id = _item[
+      'id']
+    _self._items[
+      _item_id] = _item
+
+  def _item_remove(
+        _self,
+        _item):
+    """Removes an item to those of those handled by the manager.
+
+    Args:
+      _item (dict): a dictionary representing the item.
+    """
+    _item_id = _item[
+      'id']
+    del _self.items[
+      _item_id]
 
   def _item_price_type_check(
         _self,
         _item_price):
-    """Checks the item price type
+    """Checks the item price type.
 
     Allowed values are integers or floating point
     rationals.
@@ -135,6 +164,13 @@ class ItemsManager:
   def _item_price_check(
         _self,
         _item):
+    """Performs checks on items' price.
+
+    Args:
+      _item (dict): a dictionary representing the item.
+    """
+    _item_price = _item[
+                    'price']
     _self._item_price_type_check(
       _item_price)
     _self._item_price_range_check(
@@ -143,35 +179,40 @@ class ItemsManager:
   def _item_discount_range_check(
         _self,
         _item):
-    """Checks the item discount range
+    """Checks the item discount range.
 
-    The range must be
-    _items_discount_min < item_discount < _items_discount_max
+    The allowed range interval is
+    [_items_discount_min, _items_discount_max],
     where M is indicated in the request.
 
     Args:
       _item (dict): dictionary representing the item.
     """
-    _item_discount_max = _item[
-                           'discount']
+    _item_discount = _item[
+                       'discount']
     _items_discount_max = _self._items_discount_max
     if ( _items_discount_min > _item_discount ):
       raise ValueError(
               ("Not valid input: "
                f"item '{_item}' has discount "
-               f"'{_item_discount_max}' greater than "
-               f"allowed item max discount '{_items_discount_max}'."))
+               f"'{_item_discount_max}' lower than "
+               f"allowed item minimum discount '{_items_discount_min}'."))
     if ( _items_discount_max < _item_discount ):
       raise ValueError(
               ("Not valid input: "
                f"item '{_item}' has discount "
                f"'{_item_discount_max}' greater than "
-               f"allowed item max discount '{_items_discount_max}'."))
+               f"allowed item maximum discount '{_items_discount_max}'."))
 
   def _item_validate(
         _self,
         _item):
-    _item_price = _item[
-                    'price']
+    """Item validation.
+
+    Args:
+      _item (dict): dictionary representing the item.
+    """
+    _self._item_discount_range_check(
+      _item)
     _self._item_price_check(
-      _item_price)
+      _item)

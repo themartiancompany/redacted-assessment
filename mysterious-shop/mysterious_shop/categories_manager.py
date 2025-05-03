@@ -50,7 +50,14 @@ class CategoriesManager:
         _self,
         _category_name,
         _category_id,
-        _items=set()):
+        _items={}):
+    """Creates a new category.
+
+    Args:
+      _category_name (str): a string representing the category name;
+      _category_id (int): an integer representing the category id;
+      _items (dict): the items dictionary.
+    """
     _category = {
       'name':
         _category_name,
@@ -65,6 +72,11 @@ class CategoriesManager:
   def _category_add(
         _self,
         _category):
+    """Adds a category to those handled by the manager.
+
+    Args:
+      _category (dict): a dictionary representing the category.
+    """
     _self._category_exists_check(
       _category)
     _self.category[
@@ -73,6 +85,11 @@ class CategoriesManager:
   def _category_remove(
         _self,
         _category):
+    """Removes a category to those handled by the manager.
+
+    Args:
+      _category (dict): a dictionary representing the category.
+    """
     _category_id = _category[
                      'id']
     _categories = _self.categories
@@ -82,11 +99,18 @@ class CategoriesManager:
   def _categories_add(
         _self,
         _categories):
+    """Adds multiple categories to those handled by the manager.
+
+    Args:
+      _categories (iterable): an iterables of dictionaries
+                              representing the categories.
+    """
     for _category in _categories:
       _self._category_add(
         _category)
 
   def _category_validate(
         _self,
-        _zone):
+        _category):
+
     pass

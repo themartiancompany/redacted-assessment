@@ -39,36 +39,12 @@ class Shop:
                     "mysterious-shop",
                     "Pellegrino Prevete",
                     True)
-    _self.app_config = _app_config
+    _self._app_config = _app_config
     _self._shop_config_init(
       **_shop_config)
     _self._db_manager = DbManager(
                           _self._app_config)
-    _db_categories = _self._db_manager._dbs[
-                       'categories'][
-                         'blob']
-    _self._categories_manager = CategoriesManager(
-                                  _db_categories)
-    #     _items_price_max,
-    #     _items_discount_max,
-    #     _items):
-    _items_price_min = _app_config[
-                         'items_price_min']
-    _items_price_max = _app_config[
-                         'items_price_max']
-    _items_discount_min = _app_config[
-                           'items_price_min']
-    _items_discount_max = _app_config[
-                           'items_price_max']
-    _categories = _self._db_manager._dbs[
-                    'categories'][
-                      'blob']
-    _self._items_manager = ItemsManager(
-                             _items_price_min,
-                             _items_price_max,
-                             _items_discount_min,
-                             _items_discount_max,
-                             _categories)
+    _self._categories_init()
     _self._zones_manager = ZonesManager(
                              )
 
@@ -119,3 +95,33 @@ class Shop:
         'categories_id_max'] = _categories_id_max
     _self._shop_config = _shop_config
     _self._app_config._data_save()
+
+  def _categories_init(
+        _self):
+    _app_config = _self._app_config
+    _categories = _self._db_manager._dbs[
+                    'categories'][
+                      'blob']
+    _self._categories_manager = CategoriesManager(
+                                  _categories)
+
+  def _items_init(
+        _self):
+    _app_config = _self._app_config
+    _items_price_min = _app_config[
+                         'items_price_min']
+    _items_price_max = _app_config[
+                         'items_price_max']
+    _items_discount_min = _app_config[
+                           'items_price_min']
+    _items_discount_max = _app_config[
+                           'items_price_max']
+    _items = _self._db_manager._dbs[
+               'items'][
+                 'blob']
+    _self._items_manager = ItemsManager(
+                             _items_price_min,
+                             _items_price_max,
+                             _items_discount_min,
+                             _items_discount_max,
+                             _items)
